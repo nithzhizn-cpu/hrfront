@@ -98,7 +98,7 @@
   </div>
 
   <script>
-    const API_ROOT = (window.BACKEND_URL || "http://localhost:8000") + "/api";
+    const API_ROOT = window.BACKEND_URL + "/api";
     let ADMIN_KEY = null;
     let CURRENT_CANDIDATE_ID = null;
 
@@ -241,27 +241,39 @@
 
       try {
         const data = await fetchJSON(API_ROOT + "/hr/candidate/" + id);
-        const { candidate, last_test, report, last_voice, last_photo } = data;
+        const candidate = data.candidate;
+
+const last_test =
+  (data.tests && data.tests.length > 0 ? data.tests[0] : null);
+
+const last_report =
+  (data.reports && data.reports.length > 0 ? data.reports[0] : null);
+
+const last_voice =
+  (data.voices && data.voices.length > 0 ? data.voices[0] : null);
+
+const last_photo =
+  (data.photos && data.photos.length > 0 ? data.photos[0] : null);
 
         document.getElementById("cd-name").textContent =
           candidate.full_name || "Без імені";
         document.getElementById("cd-meta").textContent =
           "ID: " + candidate.id + " · Створено: " + candidate.created_at;
 
-        if (report && report.risk_level) {
-          setRiskPill(report.risk_level);
-        }
+        if (last_report && last_report.risk_level) {
+  setRiskPill(last_report.risk_level);
+}
 
-        if (report && report.summary) {
-          document.getElementById("cd-summary").textContent = report.summary;
-        } else {
+        if (last_report && last_report.summary) {
+  document.getElementById("cd-summary").textContent = last_report.summary;
+} else {
           document.getElementById("cd-summary").textContent =
             "Немає збереженого опису.";
         }
 
         const ul = document.getElementById("cd-recs");
         ul.innerHTML = "";
-        if (report && report.recommendations && report.recommendations.length) {
+        if (last_report && last_report.recommendations && last_report.recommendations.length) {
           report.recommendations.forEach((r) => {
             const li = document.createElement("li");
             li.textContent = r;
