@@ -272,18 +272,19 @@ const last_photo =
         }
 
         const ul = document.getElementById("cd-recs");
-        ul.innerHTML = "";
-        if (last_report && last_report.recommendations && last_report.recommendations.length) {
-          report.recommendations.forEach((r) => {
-            const li = document.createElement("li");
-            li.textContent = r;
-            ul.appendChild(li);
-          });
-        } else {
-          const li = document.createElement("li");
-          li.textContent = "Немає рекомендацій.";
-          ul.appendChild(li);
-        }
+ul.innerHTML = "";
+
+if (last_report && last_report.recommendations && last_report.recommendations.length) {
+  last_report.recommendations.forEach((r) => {
+    const li = document.createElement("li");
+    li.textContent = r;
+    ul.appendChild(li);
+  });
+} else {
+  const li = document.createElement("li");
+  li.textContent = "Немає рекомендацій.";
+  ul.appendChild(li);
+}
 
         const scoresDiv = document.getElementById("scores");
         scoresDiv.innerHTML = "";
